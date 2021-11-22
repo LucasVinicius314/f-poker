@@ -1,5 +1,10 @@
 import 'package:f_poker/core/main_page.dart';
+import 'package:f_poker/model/user.dart';
+import 'package:f_poker/providers/app_provider.dart';
+import 'package:f_poker/widgets/email_text_form_field.dart';
+import 'package:f_poker/widgets/password_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,15 +16,49 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   void _createAccount() {
     // TODO: fix
   }
 
-  void _login() {
-    // TODO: fix
+  Future<void> _login() async {
+    try {
+      final user = await User.login(
+        context: context,
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
 
-    Navigator.of(context).pushReplacementNamed(MainPage.route);
+      Provider.of<AppProvider>(context, listen: false).user = user;
+
+      Navigator.of(context).pushReplacementNamed(MainPage.route);
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Notice'),
+            content: const Text('Invalid credentials'),
+            actions: [
+              TextButton(
+                child: const Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        },
+      );
+    }
   }
+
+  // TODO: add validation
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +88,16 @@ class _LoginPageState extends State<LoginPage> {
                     const Divider(height: 0),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                          alignLabelWithHint: true,
-                        ),
+                      child: EmailTextFormField(
+                        focusNode: _emailFocusNode,
+                        controller: _emailController,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Password',
-                          alignLabelWithHint: true,
-                        ),
+                      child: PasswordTextFormField(
+                        focusNode: _passwordFocusNode,
+                        controller: _passwordController,
                       ),
                     ),
                     Padding(

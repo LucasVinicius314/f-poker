@@ -13,13 +13,23 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  shared_preferences: ^2.0.7
+  http: ^0.13.3
+  flutter_dotenv: ^5.0.2
+  provider: ^6.0.1
+  json_annotation: ^4.0.1
+  package_info_plus: ^1.3.0
+  mask_text_input_formatter: ^2.0.0
 
 dev_dependencies:
+  build_runner: ^2.1.2
   flutter_test:
     sdk: flutter
+  json_serializable: ^4.1.4
 
 flutter:
   uses-material-design: true
 
   assets:
+    - .env
     - assets/images/as.png

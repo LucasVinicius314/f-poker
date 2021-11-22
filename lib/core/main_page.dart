@@ -1,6 +1,8 @@
 import 'package:f_poker/modules/game_page.dart';
 import 'package:f_poker/modules/splash_page.dart';
+import 'package:f_poker/providers/app_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -60,6 +62,14 @@ class LeftPanel extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16),
               child: const CircleAvatar(maxRadius: 64),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              child: Text(
+                Provider.of<AppProvider>(context).user?.username ?? '',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline6,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
