@@ -78,7 +78,7 @@ class Api {
       body: jsonEncode(body),
     );
 
-    final decoded = _treat(
+    final decoded = await _treat(
       uri: uri,
       response: response,
       headers: headers,
@@ -102,7 +102,7 @@ class Api {
       body: jsonEncode(body),
     );
 
-    final decoded = _treat(
+    final decoded = await _treat(
       uri: uri,
       response: response,
       headers: headers,
@@ -130,7 +130,7 @@ class Api {
   }
 
   static Future<void> _updateHeaders({required http.Response response}) async {
-    final _xAccessToken = response.headers['token'];
+    final _xAccessToken = response.headers['x-access-token'];
     if (_xAccessToken != null) await setToken(_xAccessToken);
   }
 

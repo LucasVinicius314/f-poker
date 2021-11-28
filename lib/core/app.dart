@@ -1,3 +1,4 @@
+import 'package:f_poker/constants/colors.dart';
 import 'package:f_poker/constants/constants.dart';
 import 'package:f_poker/core/login_page.dart';
 import 'package:f_poker/core/main_page.dart';
@@ -16,8 +17,10 @@ class App extends StatelessWidget {
       create: (context) => AppProvider(),
       child: MaterialApp(
         title: Constants.appName,
+        color: ExtendedColors.oysterBay,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          primarySwatch: ExtendedColors.oysterBay,
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
               padding: MaterialStateProperty.all(const EdgeInsets.all(16)),
