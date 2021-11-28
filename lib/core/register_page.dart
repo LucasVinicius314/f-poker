@@ -1,36 +1,39 @@
 import 'package:f_poker/core/main_page.dart';
-import 'package:f_poker/core/register_page.dart';
 import 'package:f_poker/model/user.dart';
 import 'package:f_poker/providers/app_provider.dart';
 import 'package:f_poker/widgets/email_text_form_field.dart';
 import 'package:f_poker/widgets/password_text_form_field.dart';
+import 'package:f_poker/widgets/username_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
-  static final route = 'login';
+  static final route = 'register';
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _emailFocusNode = FocusNode();
+  final _usernameFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
 
   final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future<void> _createAccount() async {
-    await Navigator.of(context).pushNamed(RegisterPage.route);
+  void _back() {
+    Navigator.of(context).pop();
   }
 
-  Future<void> _login() async {
+  Future<void> _createAccount() async {
     try {
-      final user = await User.login(
+      final user = await User.register(
         context: context,
+        username: _usernameController.text,
         email: _emailController.text,
         password: _passwordController.text,
       );
@@ -81,12 +84,19 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(
-                        'Login',
+                        'Create account',
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
                     const Divider(height: 0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: UsernameTextFormField(
+                        focusNode: _usernameFocusNode,
+                        controller: _usernameController,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: EmailTextFormField(
@@ -108,15 +118,15 @@ class _LoginPageState extends State<LoginPage> {
                         layoutBehavior: ButtonBarLayoutBehavior.padded,
                         children: [
                           TextButton(
-                            onPressed: _createAccount,
-                            child: const Text(
-                              'Create an account',
-                              textAlign: TextAlign.center,
-                            ),
+                            onPressed: _back,
+                            child: const Text('Go back'),
                           ),
                           ElevatedButton(
-                            onPressed: _login,
-                            child: const Text('Login'),
+                            onPressed: _createAccount,
+                            child: const Text(
+                              'Create account',
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ],
                       ),

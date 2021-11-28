@@ -2,6 +2,7 @@ import 'package:f_poker/constants/colors.dart';
 import 'package:f_poker/constants/constants.dart';
 import 'package:f_poker/core/login_page.dart';
 import 'package:f_poker/core/main_page.dart';
+import 'package:f_poker/core/register_page.dart';
 import 'package:f_poker/modules/game_page.dart';
 import 'package:f_poker/modules/splash_page.dart';
 import 'package:f_poker/providers/app_provider.dart';
@@ -37,6 +38,7 @@ class App extends StatelessWidget {
           LoginPage.route: (context) => const LoginPage(),
           MainPage.route: (context) => const MainPage(),
           GamePage.route: (context) => const GamePage(),
+          RegisterPage.route: (context) => const RegisterPage(),
         },
       ),
     );

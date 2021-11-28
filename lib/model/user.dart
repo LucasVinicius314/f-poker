@@ -35,6 +35,23 @@ class User {
     ));
   }
 
+  static Future<User> register({
+    required BuildContext context,
+    required String username,
+    required String email,
+    required String password,
+  }) async {
+    return User.fromJson(await Api.post(
+      'user/register',
+      {
+        'username': username,
+        'email': email,
+        'password': password,
+      },
+      context: context,
+    ));
+  }
+
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);

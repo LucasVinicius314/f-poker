@@ -1,6 +1,7 @@
 import 'package:f_poker/modules/game_page.dart';
 import 'package:f_poker/modules/splash_page.dart';
 import 'package:f_poker/providers/app_provider.dart';
+import 'package:f_poker/utils/functions/show_default_snack_bar.dart';
 import 'package:f_poker/utils/services/networking.dart';
 import 'package:f_poker/widgets/data_error_widget.dart';
 import 'package:flutter/foundation.dart';
@@ -38,6 +39,8 @@ class _MainPageState extends State<MainPage> {
 
       socket.onConnect((_) {
         socket.emit('get_games', {});
+
+        showDefaultSnackBar(context: context, content: 'Connected');
       });
 
       socket.on('get_games', (data) {
@@ -47,25 +50,7 @@ class _MainPageState extends State<MainPage> {
       });
 
       socket.onDisconnect((_) async {
-        await showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Notice'),
-              content: const Text('Disconnected'),
-              actions: [
-                TextButton(
-                  child: const Text('Ok'),
-                  onPressed: () {
-                    // TODO: fix
-
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
+        showDefaultSnackBar(context: context, content: 'Disconnected');
       });
 
       socket.connect();
@@ -107,6 +92,8 @@ class _MainPageState extends State<MainPage> {
             builder: (context) {
               final controller = TextEditingController();
 
+              // TODO: fix, extract and focus the input on init state
+
               return AlertDialog(
                 title: const Text('New game'),
                 content: Column(
@@ -138,7 +125,7 @@ class _MainPageState extends State<MainPage> {
           if (ans is String) {
             _socket?.emit('create_game', {'name': ans});
 
-            // Navigator.of(context).pushNamed(GamePage.route);
+            Navigator.of(context).pushNamed(GamePage.route);
           }
         },
       ),
@@ -232,10 +219,36 @@ class LeftPanel extends StatelessWidget {
                     Colors.red.withAlpha(16),
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   // TODO: fix
 
-                  Navigator.of(context).pushReplacementNamed(SplashPage.route);
+                  final ans = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Notice'),
+                        content: const Text('Log out?'),
+                        actions: [
+                          TextButton(
+                            child: const Text('No'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: const Text('Yes'),
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
+                  if (ans == true)
+                    Navigator.of(context)
+                        .pushReplacementNamed(SplashPage.route);
                 },
               ),
             ),
